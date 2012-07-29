@@ -1,0 +1,34 @@
+%h1 Sandbox
+#input
+  %p Input:
+  %form{:method => 'post', :action => '/',
+    'data-remote' => 'true', 'accepet-charset' => 'UTF-8'}
+    != csrf_tag
+    %textarea{:name => 'code', :id => 'code'}
+      :preserve
+        class Dog
+          def sneeze
+            puts 'Ahchoo!'
+          end
+        end
+        my_dog = Dog.new
+        my_dog.sneeze
+    %input{:type => 'button', :id => 'button', :value => 'eval'}
+    :javascript
+      $(function(){
+        $('#button').click(function() {
+          $.ajax({  
+            type:    'POST',  
+            url:     '/',  
+            data:    $(this).parent('form').serialize(),
+            success: function(data) {  
+              $('#result').empty();
+              $('#result').append(data);
+            }  
+          });  
+          return false;  
+        });
+      });
+#output
+  %p Output:
+  %p#result
